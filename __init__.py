@@ -48,6 +48,11 @@ class GoCall_X86_64(CallingConvention):
     int_return_reg = "rax"
     high_int_return_reg = "rbx"
 
+    def perform_get_incoming_reg_value(self, reg: RegisterName, _: Function) -> RegisterValue:
+        if reg in ["zmm15", "ymm15", "xmm15"]:
+            return variable.ConstantRegisterValue(0)
+        return variable.Undetermined()
+
 cc = GoCall_X86_64(arch=Architecture["x86_64"], name="gocall")
 Architecture["x86_64"].register_calling_convention(cc)
 
